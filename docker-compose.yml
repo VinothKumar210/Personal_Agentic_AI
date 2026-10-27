@@ -1,0 +1,72 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: knowledge_assistant_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: knowledge_assistant
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  chroma:
+    image: chromadb/chroma:latest
+    container_name: knowledge_assistant_chroma
+    restart: always
+    environment:
+      - IS_PERSISTENT=TRUE
+      - PERSIST_DIRECTORY=/chroma/chroma
+    ports:
+      - "8001:8000"
+    volumes:
+      - chroma_data:/chroma/chroma
+
+  backend:
+    build:
+      context: ./backend
+    container_name: knowledge_assistant_backend
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - ./storage:/app/storage
+    environment:
+      - APP_ENV=local
+      - API_VERSION=0.1.0
+      - AUTH_DEV_MODE=false
+      - JWT_SECRET_KEY=e2e_test_secret_key_that_is_not_default
+      - BACKEND_CORS_ORIGINS=["http://localhost:3000"]
+      - DATABASE_URL=postgresql+psycopg://postgres:postgres@postgres:5432/knowledge_assistant
+      - CHROMA_HOST=chroma
+      - CHROMA_PORT=8000
+      - CHROMA_API_KEY=${CHROMA_API_KEY}
+      - CHROMA_TENANT=${CHROMA_TENANT}
+      - CHROMA_DATABASE=${CHROMA_DATABASE}
+      - GROQ_API_KEY=${GROQ_API_KEY}
+      - GROQ_MODEL=${GROQ_MODEL:-llama-3.3-70b-versatile}
+      - STORAGE_DIR=/app/storage
+    depends_on:
+      - postgres
+      - chroma
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: knowledge_assistant_frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+  chroma_data:

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Knowledge Assistant Clipper</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      width: 300px;
+      padding: 16px;
+      margin: 0;
+      color: #333;
+    }
+    h2 {
+      margin-top: 0;
+      font-size: 16px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .form-group {
+      margin-bottom: 12px;
+    }
+    label {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #0f172a;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    button:hover {
+      background-color: #1e293b;
+    }
+    #status {
+      margin-top: 12px;
+      font-size: 13px;
+      text-align: center;
+    }
+    .success { color: #16a34a; }
+    .error { color: #dc2626; }
+  </style>
+</head>
+<body>
+  <h2>Knowledge Clipper</h2>
+  
+  <div class="form-group">
+    <label for="backendUrl">Backend URL</label>
+    <input type="text" id="backendUrl" value="http://localhost:8000" placeholder="http://localhost:8000">
+  </div>
+  
+  <div class="form-group">
+    <label for="apiKey">API Key (Requires 'capture_page')</label>
+    <input type="password" id="apiKey" placeholder="Paste your API key here">
+  </div>
+
+  <button id="clipBtn">Clip This Page</button>
+  
+  <div id="status"></div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>

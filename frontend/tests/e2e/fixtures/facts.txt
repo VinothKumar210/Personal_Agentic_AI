@@ -1,0 +1,4 @@
+Project codename: Aster Notes
+Owner: Vinoth
+Main feature: local-first knowledge retrieval
+Backup format: portable JSON bundle
